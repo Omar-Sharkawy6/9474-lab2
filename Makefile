@@ -9,4 +9,4 @@ restore: setup
 	./restore.sh $(DIR) $(MALICIOUS_DIR)
 
 setup:
-	mkdir -p $(MALICIOUS_DIR)
+	mkdir -p $(DIR)	$(MALICIOUS_DIR)
