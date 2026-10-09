@@ -91,3 +91,19 @@ flagged_keywords=("virus" "trojan" "malware" "worm" "ransomware")
 ```
 A file is considered malicious if its extension matches one of the flagged extensions or if its contents contain one of the flagged keywords.
 Keyword matching is case-insensitive.
+
+## Bonus 1 - Cron Job
+
+The antivirus can also run automatically using a cron job instead of the continuous loop in `antivirusd.sh`.
+
+The cron version uses `antivirus-cron.sh`. It performs one scan and then exits.
+
+### Prerequisites
+
+Cron must be installed and running:
+
+```bash
+sudo apt update
+sudo apt install cron
+sudo systemctl enable --now cron
+```
