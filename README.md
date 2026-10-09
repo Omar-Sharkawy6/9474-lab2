@@ -9,9 +9,11 @@ The project contains the following files and directories:
 ```text
 9474-lab2/
 ├── antivirusd.sh
+├── antivirus-cron.sh
 ├── restore.sh
 ├── Makefile
 ├── README.md
+├── whitelist.txt
 ├── dir/
 └── malicious_dir/
 ```
@@ -22,6 +24,8 @@ The project contains the following files and directories:
 - `malicious_dir/` - the quarantine directory.
 - `directory-info.last` - stores the previous directory state.
 - `directory-info.new` - stores the current directory state.
+- `antivirus-cron.sh` - runs the antivirus scan using a cron job.
+- `whitelist.txt` - stores filenames that have been restored and marked as safe.
 
 ## Prerequisites
 
@@ -106,14 +110,34 @@ Cron must be installed and running:
 sudo apt update
 sudo apt install cron
 sudo systemctl enable --now cron
+chmod +x antivirus-cron.sh
 ```
 
-Run:
+### Configure the Cron Job
+
+Open the crontab:
 
 ```bash
-rm -f malicious_dir/cron-virus.txt
-rm -f cron-directory-info.last cron-directory-info.new cron.log
+crontab -e
 ```
+add
+```bash
+* * * * * cd /home/os/OS/9474-lab2 && ./antivirus-cron.sh /home/os/OS/9474-lab2/dir /home/os/OS/9474-lab2/malicious_dir >> /home/os/OS/9474-lab2/cron.log 2>&1
+```
+check using
+```bash
+crontab -l
+```
+The cron job runs every minute, and `antivirus-cron.sh` waits 23 seconds before scanning, so the scan happens at approximately second 23 of each minute.
+
+### Every Third Friday at 12:31 AM
+
+To run the scan on the third Friday of every month at 12:31 AM:
+
+```text
+31 0 15-21 * * [ "$(date +\%u)" -eq 5 ] && cd /home/os/OS/9474-lab2 && ./antivirus-cron.sh /home/os/OS/9474-lab2/dir /home/os/OS/9474-lab2/malicious_dir
+```
+
 ## Bonus 2 - Whitelist
 
 When a quarantined file is restored using option 1 in `restore.sh`, its filename is added to `whitelist.txt`.
