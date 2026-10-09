@@ -6,10 +6,17 @@ interval=$3
 
 flagged_extensions=(".exe" ".bat" ".vbs" ".scr" ".ps1")
 flagged_keywords=("virus" "trojan" "malware" "worm" "ransomware")
+whitelist_file="whitelist.txt"
 
 scan_directory() {
     for file in "$dir"/*; do
         [ -f "$file" ] || continue
+
+        filename=$(basename "$file")
+
+        if grep -qxF "$filename" "$whitelist_file" 2>/dev/null; then
+         continue
+        fi
 
         malicious=false
 
@@ -30,7 +37,6 @@ scan_directory() {
         fi
 
         if [ "$malicious" = true ]; then
-            filename=$(basename "$file")
             echo "$filename is malicious and it is DELETED"
             cp "$file" "$malicious_dir/"
             rm "$file"

@@ -3,6 +3,8 @@
 dir=$1
 malicious_dir=$2
 
+whitelist_file="whitelist.txt"
+
 while true; do
     files=("$malicious_dir"/*)
 
@@ -35,6 +37,9 @@ while true; do
     case "$action" in
         1)
             mv "$file" "$dir/"
+            if ! grep -qxF "$filename" "$whitelist_file" 2>/dev/null; then
+              echo "$filename" >> "$whitelist_file"
+            fi
             echo "Restored $filename to $dir."
             ;;
         2)
