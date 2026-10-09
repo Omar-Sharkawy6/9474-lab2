@@ -107,3 +107,10 @@ sudo apt update
 sudo apt install cron
 sudo systemctl enable --now cron
 ```
+
+Run:
+
+```bash
+rm -f malicious_dir/cron-virus.txt
+rm -f cron-directory-info.last cron-directory-info.new cron.log
+```
