@@ -114,3 +114,10 @@ Run:
 rm -f malicious_dir/cron-virus.txt
 rm -f cron-directory-info.last cron-directory-info.new cron.log
 ```
+## Bonus 2 - Whitelist
+
+When a quarantined file is restored using option 1 in `restore.sh`, its filename is added to `whitelist.txt`.
+
+The whitelist is saved as a file, so it remains available even after the antivirus is stopped and restarted.
+
+Before scanning a file, both `antivirusd.sh` and `antivirus-cron.sh` check `whitelist.txt`. If the filename is found in the whitelist, the file is skipped even if it has a flagged extension or contains a flagged keyword.
